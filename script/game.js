@@ -52,35 +52,34 @@ function updateColor() {
 
 // ==================================================================================================================================================
 
-function occupiedTile() {
-  let count = 0;
-  for (let r = 0; r < rows;) {
-    for (let c = 0; c < columns;) {
-      if (board[r][c] === 0) { //at least one zero in the board
-        return false;
+function occupiedTile() { // Funktionen kollar om det finns en bricka med värdet 0
+  let count = 0; // Sätter "count" till 0
+  for (let r = 0; r < rows;) { // För varje rad
+    for (let c = 0; c < columns;) { // För varje kolumn
+      if (board[r][c] === 0) { // Om något värde i arrayen är 0
+        return false; // Returnerar false
       }
       c+=1; // Ökar kolumnen med 1
     }
     r+=1; // Ökar raden med 1
   }
-  return true;
+  return true; // Returnerar true
 }
 
-function spawnNewTile() {
-  if (occupiedTile()) {
-    return;
+function spawnNewTile() { // Funktionen skapar en ny bricka
+  if (occupiedTile()) { // Om det inte finns en bricka med värdet 0
+    return; // Avslutar funktionen
   }
-  let found = false;
-  while (!found) {
-    //find random row and column to place a 2 in
-    let r = Math.floor(Math.random() * rows);
-    let c = Math.floor(Math.random() * columns);
-    if (board[r][c] === 0) {
-      board[r][c] = Math.random() > 0.5 ? 2 : 4;
-      let tile = document.getElementById(r.toString() + ', ' + c.toString());
-      tile.innerText = String(board[r][c]);
-      colorTile(tile, tile.innerText);
-      found = true;
+  let found = false; // Sätter "found" till false
+  while (!found) { // Så länge "found" är false
+    let r = Math.floor(Math.random() * rows); // Sätter "r" till ett slumpmässigt tal mellan 0 och antalet rader
+    let c = Math.floor(Math.random() * columns); // Sätter "c" till ett slumpmässigt tal mellan 0 och antalet kolumner
+    if (board[r][c] === 0) { // Om värdet i arrayen är 0
+      board[r][c] = Math.random() > 0.5 ? 2 : 4; // Sätter värdet till 2 eller 4
+      let tile = document.getElementById(String(r) + ', ' + String(c)); // Hämtar brickan med koordinaterna "r, c"
+      tile.innerText = String(board[r][c]); // Sätter brickans värde till "board[r][c]"
+      colorTile(tile, tile.innerText); // Färgar brickan
+      found = true; // Sätter "found" till true
     }
   }
 }
@@ -112,7 +111,7 @@ function setGame() { // Funktionen skapar spelplanen
       let tile = document.createElement('div'); // Skapar en html "div" tagg
       tile.id = String(r) + ', ' + String(c); // Sätter id till dess koordinater "r, c"
       let number = board[r][c]; // Sätter "number" till värdet i arrayen
-      updateTile(tile, number); // Uppdaterar "tile" med "number"
+      updateTile(tile, number); // Uppdaterar brickan
       document.getElementById('game-board').append(tile); // Lägger till en "tile" i html "game-board"
       c+=1; // Ökar kolumnen med 1
     }
@@ -172,7 +171,7 @@ function moveLeft() {
     row = leftArrange(row); // Skjuter alla värden till vänster i arrayen
     board[r] = row; // Sätter raden i "board" arrayen till den uppdaterade "row" arrayen
     for (let c = 0; c < columns;){ // För varje kolumn
-      let tile = document.getElementById(r.toString() + ', ' + c.toString()); // Sätter "tile" till brickan med koordinaterna "r, c"
+      let tile = document.getElementById(String(r) + ', ' + String(c)); // Sätter "tile" till brickan med koordinaterna "r, c"
       let number = board[r][c]; // Sätter "number" till värdet i arrayen
       updateTile(tile, number); // Uppdaterar html med nya brickan
       c+=1; // Ökar kolumnen med 1
@@ -187,7 +186,7 @@ function moveRight() {
     row = rightArrange(row); // Skjuter alla värden till höger i arrayen
     board[r] = row; // Sätter raden i "board" arrayen till den uppdaterade "row" arrayen
     for (let c = 0; c < columns;){ // För varje kolumn
-      let tile = document.getElementById(r.toString() + ', ' + c.toString()); // Sätter "tile" till brickan med koordinaterna "r, c"
+      let tile = document.getElementById(String(r) + ', ' + String(c)); // Sätter "tile" till brickan med koordinaterna "r, c"
       let number = board[r][c]; // Sätter "number" till värdet i arrayen
       updateTile(tile, number); // Uppdaterar html med nya brickan
       c+=1; // Ökar kolumnen med 1
@@ -198,11 +197,15 @@ function moveRight() {
 
 function moveUp() {
   for (let c = 0; c < columns;) { // För varje kolumn
-    let row = [board[0][c], board[1][c], board[2][c], board[3][c]]; // Sätter "row" till kolumnen i "board" arrayen
+    let row = []; // Skapar en tom array
+    for (let r = 0; r < rows;) { // För varje rad
+      row.push(board[r][c]); // Lägger till värdet i arrayen
+      r+=1; // Ökar raden med 1
+    }
     row = leftArrange(row); // Skjuter alla värden till vänster i arrayen
     for (let r = 0; r < rows;){ // För varje rad
       board[r][c] = row[r]; // Sätter raden i "board" arrayen till den uppdaterade "row" arrayen
-      let tile = document.getElementById(r.toString() + ', ' + c.toString()); // Sätter "tile" till brickan med koordinaterna "r, c"
+      let tile = document.getElementById(String(r) + ', ' + String(c)); // Sätter "tile" till brickan med koordinaterna "r, c"
       let number = board[r][c]; // Sätter "number" till värdet i arrayen
       updateTile(tile, number); // Uppdaterar html med nya brickan
       r+=1; // Ökar raden med 1
@@ -213,11 +216,15 @@ function moveUp() {
 
 function moveDown() {
   for (let c = 0; c < columns;) { // För varje kolumn
-    let row = [board[0][c], board[1][c], board[2][c], board[3][c]]; // Sätter "row" till kolumnen i "board" arrayen
-    row = rightArrange(row); // Skjuter alla värden till höger i arrayen
+    let row = []; // Skapar en tom array
+    for (let r = 0; r < rows;) { // För varje rad
+      row.push(board[r][c]); // Lägger till värdet i arrayen
+      r+=1; // Ökar raden med 1
+    }
+    row = rightArrange(row); // Skjuter alla värden till vänster i arrayen
     for (let r = 0; r < rows;){ // För varje rad
       board[r][c] = row[r]; // Sätter raden i "board" arrayen till den uppdaterade "row" arrayen
-      let tile = document.getElementById(r.toString() + ', ' + c.toString()); // Sätter "tile" till brickan med koordinaterna "r, c"
+      let tile = document.getElementById(String(r) + ', ' + String(c)); // Sätter "tile" till brickan med koordinaterna "r, c"
       let number = board[r][c]; // Sätter "number" till värdet i arrayen
       updateTile(tile, number); // Uppdaterar html med nya brickan
       r+=1; // Ökar raden med 1
