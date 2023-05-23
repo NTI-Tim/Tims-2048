@@ -27,7 +27,7 @@ function colorTile(tile, number) { // Funktionen färgar brickan
 
 function valueToColor(tile, number) {
   if (number > 0) { // Om brickans värde är större än 0
-    tile.innerText = number.toString(); // Sätter brickans värde till "number"
+    tile.innerText = String(number); // Sätter brickans värde till "number"
     colorTile(tile, number); // Färgar brickan
   }
   else {
