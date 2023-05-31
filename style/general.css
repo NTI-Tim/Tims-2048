@@ -166,16 +166,11 @@ main h3:hover {
   animation: slide-left var(--slow-transition-speed) 1.5s normal backwards;
 }
 
-#game-setting {
+#new-game {
   animation: slide-left var(--slow-transition-speed) 1.75s normal backwards;
 }
 
-#new-game {
-  animation: slide-left var(--slow-transition-speed) 2s normal backwards;
-}
-
 /* 0.25s paus */
-
 
 /* ================================================================================================================================================== */
 /* KEYFRAMES ---------------------------------------------------------------------------------------------------------------------------------------- */
